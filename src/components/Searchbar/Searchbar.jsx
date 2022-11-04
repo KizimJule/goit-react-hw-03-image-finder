@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { toast } from 'react-toastify';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import * as SC from './Searchbar.styled';
 
 export class Searchbar extends Component {
@@ -35,7 +35,7 @@ export class Searchbar extends Component {
       <SC.Searchbar>
         <SC.Form onSubmit={this.handleSubmit}>
           <SC.SearchFormButton type="submit">
-            <SC.SearchFormButtonLabel className="button-label">
+            <SC.SearchFormButtonLabel>
               <BiSearch style={{ width: 30, height: 30 }} />
             </SC.SearchFormButtonLabel>
           </SC.SearchFormButton>
@@ -55,3 +55,8 @@ export class Searchbar extends Component {
     );
   }
 }
+Searchbar.propTypes = {
+  name: PropTypes.string,
+  handleSubmit: PropTypes.func,
+  handleInputChange: PropTypes.func,
+};

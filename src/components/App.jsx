@@ -7,10 +7,9 @@ import { toast } from 'react-toastify';
 
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
-
 import { Loader } from './Loader/Loader';
 import { Button } from './Button/Button';
-// import { Modal } from './Button/Button';
+import { Modal } from './Modal/Modal';
 
 export class App extends Component {
   state = {
@@ -20,6 +19,7 @@ export class App extends Component {
     perPage: 12,
     pictures: [],
     error: null,
+    showModal: false,
     apiUrl: 'https://pixabay.com/api/',
     apiKey: '30025570-88047e109e19df2adec6469b3',
   };
@@ -80,6 +80,10 @@ export class App extends Component {
     }));
   };
 
+  togleModal = () => {
+    this.setState(({ showModal }) => ({ showModal: !showModal }));
+  };
+
   componentDidUpdate(prevProps, prevState) {
     const { name } = this.state;
 
@@ -89,12 +93,14 @@ export class App extends Component {
   }
 
   render() {
-    const { pictures, loading } = this.state;
-    const { name } = this.props;
+    const { pictures, loading, showModal, largeImageURL, tags } = this.state;
+
+    // const { name } = this.props;
+
     return (
       <div
         style={{
-          height: '100vh',
+          // height: '100vh',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -102,13 +108,16 @@ export class App extends Component {
           fontSize: 40,
           color: '#010101',
           gap: 20,
+          marginTop: 92,
         }}
       >
         <Searchbar onSubmitForm={this.handleFormSubmit} />
 
-        {!name && !loading && <p>Введите название картинки</p>}
+        {pictures.length <= 0 && !loading && <p>Введите название картинки</p>}
 
-        {pictures.length > 0 && <ImageGallery pictures={this.state.pictures} />}
+        {pictures.length > 0 && (
+          <ImageGallery pictures={pictures} showModal={this.togleModal} />
+        )}
 
         {loading && <Loader loading={loading} />}
 
@@ -116,7 +125,12 @@ export class App extends Component {
           <Button title="Load more" onClick={this.loadMoreImages} />
         )}
 
-        {/* <Modal/> */}
+        {showModal && (
+          <Modal onClose={this.togleModal}>
+            <p>Hello it's modal</p>
+            <img src={largeImageURL} alt={tags} />
+          </Modal>
+        )}
 
         <ToastContainer autoClose={3000} />
       </div>
