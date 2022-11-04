@@ -89,7 +89,7 @@ export class App extends Component {
   }
 
   render() {
-    const { pictures, loading, error } = this.state;
+    const { pictures, loading } = this.state;
     const { name } = this.props;
     return (
       <div
