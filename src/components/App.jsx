@@ -1,35 +1,65 @@
 import React, { Component } from 'react';
 import './App.css';
 
-// import axios from 'axios';
+import axios from 'axios';
 
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
-// import { ImageGalleryItem } from './ImageGalleryItem/ImageGalleryItem';
+
 // import { Loader } from './Loader/Loader';
 // import { Button } from './Button/Button';
 // import { Modal } from './Button/Button';
 
+// axios.defaults.baseURL = 'https://pixabay.com/api/';
+// const KEY = '30025570-88047e109e19df2adec6469b3';
+// let perPage = 12;
+// let page = 1;
+
 export class App extends Component {
   state = {
     name: '',
-    isLoaded: false,
-    articles: [],
+    loading: false,
+    page: 1,
+    perPage: 12,
+    pictures: [],
+    apiUrl: 'https://pixabay.com/api/',
+    apiKey: '30025570-88047e109e19df2adec6469b3',
   };
-
-  //
-  componentDidMount() {
-    fetch(
-      'https://pixabay.com/api/?q=cat&page=1&key=30025570-88047e109e19df2adec6469b3&image_type=photo&orientation=horizontal&per_page=12'
-    )
-      .then(res => res.json())
-      .then(console.log);
-  }
 
   handleFormSubmit = name => {
     this.setState({ name });
-    console.log(name);
   };
+
+  fetchPictures = name => {
+    return axios.get(
+      `${this.state.apiUrl}/?key=${this.state.apiKey}&q=${name}&image_type=photo&orientation=horizontal&safesearch=true&page=${this.state.page}&per_page=${this.state.perPage}`
+    );
+  };
+
+  async searchArticles() {
+    const { name } = this.state;
+    this.setState({ loading: true });
+
+    try {
+      const { data } = await this.fetchPictures(name);
+
+      this.setState({
+        pictures: data.hits,
+        error: null,
+      });
+    } catch (error) {
+      this.setState({ error });
+    } finally {
+      this.setState({ loading: false });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { name } = this.state;
+    if (name !== prevState.name) {
+      this.searchArticles();
+    }
+  }
 
   render() {
     return (
@@ -44,8 +74,8 @@ export class App extends Component {
         }}
       >
         <Searchbar onSubmitForm={this.handleFormSubmit} />
-        <ImageGallery />
-        {/* <ImageGalleryItem /> */}
+        {/* {this.state.pictures.length > 0 && <div>rrrrrrrrrrrrrrrrrr</div>} */}
+        {/* <ImageGallery pictures={this.state.pictures} /> */}
         {/* <Loader /> */}
         {/* <Button /> */}
         {/* <Modal/> */}

@@ -1,14 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export const ImageGalleryItem = (images = []) => {
-  const markup = images
-    .map(image => {
-      return (
-        <li class="gallery-item">
-          <img src="image.webformatURL" alt="image.tags" loading="lazy" />
-        </li>
-      );
-    })
-    .join('');
-  return markup;
-};
+export const ImageGalleryItem = ({ id, webformatURL, tags }) => (
+  <li className="ImageGalleryItem" id={id}>
+    <img className="ImageGalleryItem-image" src={webformatURL} alt={tags} />
+  </li>
+);
+
+// {
+//   console.log(pictures);
+//   const markup = pictures
+//     .map((webformatURL, tags) =>  (
+//         <li class="gallery-item">
+//           <img src="webformatURL" alt="tags" loading="lazy" />
+//         </li>
+//       );
+//     )
+//     .join('');
+//   return markup;
+// };
