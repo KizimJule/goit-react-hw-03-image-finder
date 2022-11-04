@@ -74,8 +74,8 @@ export class App extends Component {
         }}
       >
         <Searchbar onSubmitForm={this.handleFormSubmit} />
-        {/* {this.state.pictures.length > 0 && <div>rrrrrrrrrrrrrrrrrr</div>} */}
-        {/* <ImageGallery pictures={this.state.pictures} /> */}
+
+        <ImageGallery pictures={this.state.pictures} />
         {/* <Loader /> */}
         {/* <Button /> */}
         {/* <Modal/> */}
