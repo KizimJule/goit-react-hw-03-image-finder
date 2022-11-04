@@ -1,7 +1,8 @@
 import React from 'react';
+import * as SC from './ImageGalleryItem.styled';
 
 export const ImageGalleryItem = ({ id, webformatURL, tags }) => (
-  <li className="ImageGalleryItem" key={id}>
-    <img className="ImageGalleryItem-image" src={webformatURL} alt={tags} />
-  </li>
+  <SC.GalleryItem key={id}>
+    <SC.GalleryItemImage src={webformatURL} alt={tags} />
+  </SC.GalleryItem>
 );

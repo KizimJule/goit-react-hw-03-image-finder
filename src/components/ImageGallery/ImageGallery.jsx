@@ -1,8 +1,9 @@
 import React from 'react';
+import * as SC from './ImageGallery.styled';
 import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem';
 
 export const ImageGallery = ({ pictures }) => (
-  <ul className="gallery">
+  <SC.Gallery>
     {pictures.map(pic => (
       <ImageGalleryItem
         key={pic.id}
@@ -10,5 +11,5 @@ export const ImageGallery = ({ pictures }) => (
         tags={pic.tags}
       />
     ))}
-  </ul>
+  </SC.Gallery>
 );

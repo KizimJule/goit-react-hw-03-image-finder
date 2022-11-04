@@ -1,10 +1,7 @@
-import axios from 'axios';
 import React, { Component } from 'react';
 import { BiSearch } from 'react-icons/bi';
-// import { nanoid } from 'nanoid';
+import { toast } from 'react-toastify';
 // import PropTypes from 'prop-types';
-
-// import '../styles.css';
 import * as SC from './Searchbar.styled';
 
 export class Searchbar extends Component {
@@ -18,34 +15,12 @@ export class Searchbar extends Component {
     apiKey: '30025570-88047e109e19df2adec6469b3',
   };
 
-  // fetchPictures = evt => {
-  //   this.setState({ [evt.target.name]: evt.target.value }, () => {
-  //     axios
-  //       .get(
-  //         `${this.state.apiUrl}/?key=${this.state.apiKey}&q=${this.state.name}&image_type=photo&orientation=horizontal&safesearch=true&page=${this.state.page}&per_page=${this.state.perPage}`
-  //       )
-  //       .then(res => this.setState({ pictures: res.data.hits }))
-  //       .catch(err => console.log(err));
-  //   });
-  // };
-
   handleSubmit = evt => {
     evt.preventDefault();
-
-    // this.setState({ [evt.target.name]: evt.target.value }, () => {
-    //   axios
-    //     .get(
-    //       `${this.state.apiUrl}/?key=${this.state.apiKey}&q=${this.state.name}&image_type=photo&orientation=horizontal&safesearch=true&page=${this.state.page}&per_page=${this.state.perPage}`
-    //     )
-    //     .then(res => this.setState({ pictures: res.data.hits }))
-    //     .catch(err => console.log(err));
-    // });
-
     if (this.state.name.trim() === '') {
-      alert('bbbbbb');
+      toast.error('Please, enter the word');
       return;
     }
-
     this.props.onSubmitForm(this.state.name);
     this.setState({ name: '' });
   };
@@ -56,7 +31,6 @@ export class Searchbar extends Component {
   };
 
   render() {
-    // console.log(this.state.pictures);
     return (
       <SC.Searchbar>
         <SC.Form onSubmit={this.handleSubmit}>
