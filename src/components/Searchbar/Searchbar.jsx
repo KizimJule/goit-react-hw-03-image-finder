@@ -17,6 +17,7 @@ export class Searchbar extends Component {
 
   handleSubmit = evt => {
     evt.preventDefault();
+
     if (this.state.name.trim() === '') {
       toast.error('Please, enter the word');
       return;

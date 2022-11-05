@@ -20,6 +20,8 @@ export class App extends Component {
     pictures: [],
     error: null,
     showModal: false,
+    largeImageURL: '',
+    totalImages: 0,
     apiUrl: 'https://pixabay.com/api/',
     apiKey: '30025570-88047e109e19df2adec6469b3',
   };
@@ -30,42 +32,50 @@ export class App extends Component {
         theme: 'colored',
       });
     }
-    this.setState({ name });
+    this.setState({
+      name,
+      page: 1,
+    });
   };
 
   fetchPictures = name => {
     const { apiUrl, apiKey, page, perPage } = this.state;
-    return (
-      axios
-        .get(
-          `${apiUrl}/?key=${apiKey}&q=${name}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${perPage}`
-        )
-        // .then(response => {
-        //   if (response.ok) {
-        //     return response.json();
-        //   }
-        //   return Promise.reject(
-        //     new Error(`No images with name "${this.state.name}"`)
-        //   );
-        // })
-        .catch(error => {
-          this.setState({ error });
-          toast.error(`${error}`, {
-            theme: 'colored',
-          });
-        })
+    return axios.get(
+      `${apiUrl}/?key=${apiKey}&q=${name}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${perPage}`
     );
+    // .then(response => {
+    //   if (response.ok) {
+    //     return response.json();
+    //   }
+    //   return Promise.reject(
+    //     new Error(`No images with name "${this.state.name}"`)
+    //   );
+    // })
+    // .catch(error => {
+    //   this.setState({ error });
+    //   toast.error(`${error}`, {
+    //     theme: 'colored',
+    //   });
+    // })
   };
 
   async searchArticles() {
-    const { name } = this.state;
-    this.setState({ loading: true, pictures: [] });
+    const { name, page } = this.state;
+    this.setState({ loading: true });
+
     try {
-      const { data } = await this.fetchPictures(name);
+      const { data } = await this.fetchPictures(name, page);
       this.setState({
-        pictures: data.hits,
-        error: null,
+        pictures:
+          page === 1 ? data.hits : [...this.state.pictures, ...data.hits],
+        totalImages: data.totalHits,
       });
+
+      if (data.totalHits === 0) {
+        toast.error(`No images with name "${this.state.name}"`, {
+          theme: 'colored',
+        });
+      }
     } catch (error) {
       this.setState({ error });
     } finally {
@@ -73,29 +83,35 @@ export class App extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { name, page } = this.state;
+
+    if (prevState.name === name && prevState.page === page) {
+      return;
+    }
+    if (prevState.name !== name) {
+      this.setState({ pictures: [] });
+    }
+    this.searchArticles();
+  }
+
   loadMoreImages = () => {
-    console.log(this.state.page);
     this.setState(prevState => ({
       page: prevState.page + 1,
     }));
   };
 
-  togleModal = () => {
-    this.setState(({ showModal }) => ({ showModal: !showModal }));
+  togleModal = largeImageURL => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+      largeImageURL: largeImageURL,
+    }));
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    const { name } = this.state;
-
-    if (name !== prevState.name) {
-      this.searchArticles();
-    }
-  }
-
   render() {
-    const { pictures, loading, showModal, largeImageURL, tags } = this.state;
-
-    // const { name } = this.props;
+    const { pictures, loading, showModal, largeImageURL, totalImages, page } =
+      this.state;
+    const restOfImages = totalImages - page * 12;
 
     return (
       <div
@@ -121,14 +137,13 @@ export class App extends Component {
 
         {loading && <Loader loading={loading} />}
 
-        {pictures.length === 12 && (
+        {pictures.length > 0 && restOfImages > 0 && (
           <Button title="Load more" onClick={this.loadMoreImages} />
         )}
 
         {showModal && (
           <Modal onClose={this.togleModal}>
-            <p>Hello it's modal</p>
-            <img src={largeImageURL} alt={tags} />
+            <img src={largeImageURL} alt="" />
           </Modal>
         )}
 
