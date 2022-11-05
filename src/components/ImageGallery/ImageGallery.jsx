@@ -24,5 +24,8 @@ ImageGallery.propTypes = {
   pictures: PropTypes.array,
   id: PropTypes.number,
   webformatURL: PropTypes.string,
+  largeImageURL: PropTypes.string,
   tags: PropTypes.string,
+  showModal: PropTypes.func,
+  imgInfo: PropTypes.func,
 };

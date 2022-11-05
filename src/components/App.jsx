@@ -28,13 +28,8 @@ export class App extends Component {
   };
 
   imgInfo = e => {
-    // const altImg = e.currentTarget.getAttribute('alt');
-    // const largeImg = e.target.getAttribute('dataLargeimageurl');
-    console.log('img', e);
-    // console.log('ededede', largeImg);
     this.setState({
       largeImageURL: e,
-      // alt: altImg,
     });
   };
 
@@ -55,20 +50,6 @@ export class App extends Component {
     return axios.get(
       `${apiUrl}/?key=${apiKey}&q=${name}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${perPage}`
     );
-    // .then(response => {
-    //   if (response.ok) {
-    //     return response.json();
-    //   }
-    //   return Promise.reject(
-    //     new Error(`No images with name "${this.state.name}"`)
-    //   );
-    // })
-    // .catch(error => {
-    //   this.setState({ error });
-    //   toast.error(`${error}`, {
-    //     theme: 'colored',
-    //   });
-    // })
   };
 
   async searchArticles() {
@@ -113,7 +94,7 @@ export class App extends Component {
     }));
   };
 
-  togleModal = largeImageURL => {
+  togleModal = () => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
     }));
@@ -123,7 +104,6 @@ export class App extends Component {
     const { pictures, loading, showModal, largeImageURL, totalImages, page } =
       this.state;
 
-    console.log('render', largeImageURL);
     const restOfImages = totalImages - page * 12;
 
     return (

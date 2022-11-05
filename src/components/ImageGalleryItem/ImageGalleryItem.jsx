@@ -16,7 +16,6 @@ export const ImageGalleryItem = ({
       alt={tags}
       dataLargeimageurl={largeImageURL}
       onClick={() => {
-        console.log('largeImageURL', largeImageURL);
         imgInfo(largeImageURL);
       }}
     />
@@ -27,5 +26,5 @@ ImageGalleryItem.propTypes = {
   webformatURL: PropTypes.string,
   largeImageURL: PropTypes.string,
   tags: PropTypes.string,
-  imgModal: PropTypes.func,
+  showModal: PropTypes.func,
 };

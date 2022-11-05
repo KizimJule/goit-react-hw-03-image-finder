@@ -7,12 +7,7 @@ import * as SC from './Searchbar.styled';
 export class Searchbar extends Component {
   state = {
     name: '',
-    page: 1,
-    perPage: 12,
-    loading: false,
     pictures: [],
-    apiUrl: 'https://pixabay.com/api/',
-    apiKey: '30025570-88047e109e19df2adec6469b3',
   };
 
   handleSubmit = evt => {
