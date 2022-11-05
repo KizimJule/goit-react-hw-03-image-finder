@@ -21,9 +21,21 @@ export class App extends Component {
     error: null,
     showModal: false,
     largeImageURL: '',
+    alt: '',
     totalImages: 0,
     apiUrl: 'https://pixabay.com/api/',
     apiKey: '30025570-88047e109e19df2adec6469b3',
+  };
+
+  imgInfo = e => {
+    // const altImg = e.currentTarget.getAttribute('alt');
+    // const largeImg = e.target.getAttribute('dataLargeimageurl');
+    console.log('img', e);
+    // console.log('ededede', largeImg);
+    this.setState({
+      largeImageURL: e,
+      // alt: altImg,
+    });
   };
 
   handleFormSubmit = name => {
@@ -104,13 +116,14 @@ export class App extends Component {
   togleModal = largeImageURL => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
-      largeImageURL: largeImageURL,
     }));
   };
 
   render() {
     const { pictures, loading, showModal, largeImageURL, totalImages, page } =
       this.state;
+
+    console.log('render', largeImageURL);
     const restOfImages = totalImages - page * 12;
 
     return (
@@ -132,7 +145,11 @@ export class App extends Component {
         {pictures.length <= 0 && !loading && <p>Введите название картинки</p>}
 
         {pictures.length > 0 && (
-          <ImageGallery pictures={pictures} showModal={this.togleModal} />
+          <ImageGallery
+            pictures={pictures}
+            showModal={this.togleModal}
+            imgInfo={this.imgInfo}
+          />
         )}
 
         {loading && <Loader loading={loading} />}

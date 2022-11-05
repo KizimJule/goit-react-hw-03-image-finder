@@ -6,21 +6,26 @@ export const ImageGalleryItem = ({
   id,
   webformatURL,
   tags,
-  largeimageurl,
+  largeImageURL,
   showModal,
+  imgInfo,
 }) => (
   <SC.GalleryItem key={id} onClick={showModal}>
     <SC.GalleryItemImage
       src={webformatURL}
       alt={tags}
-      largeimageurl={largeimageurl}
+      dataLargeimageurl={largeImageURL}
+      onClick={() => {
+        console.log('largeImageURL', largeImageURL);
+        imgInfo(largeImageURL);
+      }}
     />
   </SC.GalleryItem>
 );
 ImageGalleryItem.propTypes = {
   id: PropTypes.number,
   webformatURL: PropTypes.string,
-  largeimageurl: PropTypes.string,
+  largeImageURL: PropTypes.string,
   tags: PropTypes.string,
   imgModal: PropTypes.func,
 };
