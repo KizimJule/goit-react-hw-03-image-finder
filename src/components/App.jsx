@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import './App.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 
+import { fetchPictures } from './FetchPictures/FetchPictures';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Loader } from './Loader/Loader';
@@ -23,8 +23,6 @@ export class App extends Component {
     largeImageURL: '',
     alt: '',
     totalImages: 0,
-    apiUrl: 'https://pixabay.com/api/',
-    apiKey: '30025570-88047e109e19df2adec6469b3',
   };
 
   imgInfo = e => {
@@ -42,14 +40,8 @@ export class App extends Component {
     this.setState({
       name,
       page: 1,
+      pictures: [],
     });
-  };
-
-  fetchPictures = name => {
-    const { apiUrl, apiKey, page, perPage } = this.state;
-    return axios.get(
-      `${apiUrl}/?key=${apiKey}&q=${name}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${perPage}`
-    );
   };
 
   async searchArticles() {
@@ -57,10 +49,9 @@ export class App extends Component {
     this.setState({ loading: true });
 
     try {
-      const { data } = await this.fetchPictures(name, page);
+      const { data } = await fetchPictures(name, page);
       this.setState({
-        pictures:
-          page === 1 ? data.hits : [...this.state.pictures, ...data.hits],
+        pictures: [...this.state.pictures, ...data.hits],
         totalImages: data.totalHits,
       });
 
@@ -81,9 +72,6 @@ export class App extends Component {
 
     if (prevState.name === name && prevState.page === page) {
       return;
-    }
-    if (prevState.name !== name) {
-      this.setState({ pictures: [] });
     }
     this.searchArticles();
   }
@@ -109,7 +97,6 @@ export class App extends Component {
     return (
       <div
         style={{
-          // height: '100vh',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
